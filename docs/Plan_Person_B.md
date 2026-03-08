@@ -52,6 +52,7 @@
 ---
 
 ## 🛡️ Definition of Done (DoD)
+
 - [x] หน้าจอ POS ใช้งานได้รวดเร็ว (รองรับ Keyboard Flow หลัก)
 - [x] ระบบปิดกะเก็บความลับยอด Expected (Blind Drop) ทำงานตามจริงบน UI
 - [x] Dashboards แสดงผลข้อมูลยอดขายและส่วนต่างกะได้ทันที
@@ -60,6 +61,7 @@
 ---
 
 ## 📍 Current Repo Reality Check (As of 2026-03-08)
+
 
 สถานะจริงของ repository ตอนนี้คือ **Frontend Workflow & UI Completed (Mock-First)** โดย Person B ได้วางรากฐานไว้แน่นหนา ดังนี้:
 
@@ -77,6 +79,44 @@
 3. ปรับแต่ง UI ตาม Feedback จากการใช้งานจริง (Polish)
 
 *(Update 2026-03-08: Agent A ประกาศว่า Phase A-1 ถึง A-3 เสร็จสมบูรณ์แล้ว ให้ Agent B เริ่มเชื่อมต่อ `auth`, `products`, `shifts (open/active)`, `orders`, `expenses` ได้ทันที)*
+ 
+สถานะจริงของ repository ตอนนี้คือ **Scaffold Foundation เสร็จแล้ว แต่ Business Implementation ยังไม่เริ่ม** โดยสิ่งที่มีอยู่จริงใน code มีเพียง:
+
+- Next.js App Router shell
+- global CSS พื้นฐาน
+- PWA service worker scaffold ด้วย Serwist
+- dependencies ที่จำเป็นสำหรับงาน Frontend/Backend ถูกติดตั้งแล้ว
+- Vitest config พร้อมใช้งาน
+
+สิ่งที่ **ยังไม่มี implementation จริง** ใน repo ตอนนี้:
+
+- Better-Auth flow จริง
+- API routes ฝั่ง `/api/v1`
+- RBAC middleware จริง
+- database schema code / migrations ใน source tree
+- shared TypeScript DTOs
+- Jotai store ของ cart/shift/session
+- business screens ของ Person B ทุกหน้า
+- mock server / handlers / frontend tests
+
+ดังนั้น Person B ต้องทำงานแบบ **contract-first + mock-first** ก่อน และค่อยสลับไปเรียก API จริงเมื่อ Person A ส่ง backend ตามสัญญา
+
+---
+
+## ✅ Person B ทำได้ทันทีจากของที่มีตอนนี้
+
+### 1. App Shell และ Navigation Framework
+ทำได้ทันทีโดยไม่ต้องรอ backend จริง
+
+- สร้าง layout หลักของระบบ เช่น sidebar, topbar, content shell
+- แยกเมนูตาม role จาก mock session
+- ทำ unauthorized state, forbidden state, empty shell state
+- ทำ shift status badge ที่ header/sidebar โดยอ่านค่าจาก mock `active_shift_id`
+
+ผลลัพธ์ที่ควรได้:
+
+- โครง route กลางของระบบพร้อมใช้งาน
+- เปลี่ยนเมนูตาม role ได้
 
 - สลับ state ระหว่าง `OWNER`, `ADMIN`, `CASHIER` ได้จาก mock
 
