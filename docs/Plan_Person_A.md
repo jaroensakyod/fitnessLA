@@ -1,6 +1,6 @@
 # Mission Blueprint: Person A (Finance Core & Backend Owner)
 **Project:** fitnessLA | Phase 1
-**Status:** ⚒️ Phase 1 Ready for Implementation (Agent A Mode Active)
+**Status:** ⚒️ Phase 1 In Progress (A-1 Completed)
 **Role:** Backend / Accounting Engine / Database Governance
 
 ---
@@ -23,14 +23,14 @@
 
 ### Phase A-1: Infrastructure & Auth Bridge (Target: Grounding)
 เป้าหมาย: สร้างกรงเหล็กสำหรับข้อมูลและระบบสมาชิกเพื่อให้ Agent B สลับจาก Mock Session ได้
-- [ ] **A-1.1: Database Migration & CoA Seed**
+- [x] **A-1.1: Database Migration & CoA Seed**
     - รัน `npx prisma migrate dev --name init_accounting_auth` ไปยัง Supabase
     - สร้าง Seed สำหรับ **Chart of Accounts (CoA)** เบื้องต้น (1010-Cash, 4010-Revenue, 5010-Expense)
     - **Hard Gate**: `npx prisma db seed` ผ่านและข้อมูล CoA แสดงในฐานข้อมูล
-- [ ] **A-1.2: Better-Auth Server Setup**
+- [x] **A-1.2: Better-Auth Server Setup**
     - ติดตั้งและตั้งค่า `src/lib/auth.ts` พร้อมจัดการ Role (OWNER, ADMIN, CASHIER)
     - **Hard Gate**: `GET /api/auth/session` เมื่อ Login แล้วต้องคืนค่า User พร้อม Role ตรงตาม Schema
-- [ ] **A-1.3: Admin User Creation API**
+- [x] **A-1.3: Admin User Creation API**
     - สร้าง `POST /api/v1/admin/users` สำหรับ Owner สร้างพนักงาน
     - **Hard Gate**: Unit Test ทดสอบ Role Guard ของ API นี้ (Admin/Owner เท่านั้นที่เข้าได้)
 
