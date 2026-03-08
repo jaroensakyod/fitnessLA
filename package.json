@@ -7,7 +7,9 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:migrate": "prisma migrate dev --name init_accounting_auth",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@serwist/next": "^9.5.6",
@@ -37,5 +39,8 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.18"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   }
 }
