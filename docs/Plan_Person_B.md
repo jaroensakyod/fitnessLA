@@ -5,6 +5,27 @@
 
 ---
 
+## Reality Sync Update (2026-03-11)
+
+### Done in latest integration cycle
+- Better-Auth cookie session is now active in real mode.
+- `real-app-adapter.ts` now handles real login/session and key phase-1 endpoints.
+- Core route protection is active through `middleware.ts`.
+- Hard gate passed in latest auth migration cycle.
+
+### What Agent B should do next
+1. Run browser smoke test in real mode and verify end-to-end flow.
+2. Validate UX states (loading/error/empty) on pages now connected to real endpoints.
+3. Freeze and report API gaps that remain in not-implemented adapter methods.
+
+### Still pending backend contracts or implementation
+- COA CRUD API
+- Product create/update/stock API
+- Shift inventory summary API
+- Advanced report APIs (shift summary, P&L, GL)
+
+---
+
 ## 🎯 Primary Objectives
 1.  **Fast Operations:** [DONE] หน้าเคาน์เตอร์ POS รองรับ Keyboard Shortcuts พร้อม Jotai Store
 2.  **Enforced Logic:** [DONE] Shift Workflow แบบ Blind Drop และ Expenses แบบบังคับรูปภาพ

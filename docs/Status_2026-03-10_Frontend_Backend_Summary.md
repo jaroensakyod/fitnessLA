@@ -1,5 +1,14 @@
 # Frontend / Backend Status Summary - 2026-03-10
 
+## Update 2026-03-11 (Real Mode Delta)
+
+- Better-Auth cookie-based real login/session is now active.
+- Session resolution moved to Better-Auth server API (`auth.api.getSession`).
+- Middleware guard is active on core app routes.
+- `real-app-adapter.ts` now includes real calls for auth/session, products, shifts, orders, expenses, daily summary, and admin user creation.
+- Latest hard gate passed on the migration cycle (build, lint, tests).
+- For handoff details and next steps, see `docs/Handoff_2026-03-11_Agent-B_Real-Mode.md`.
+
 ## Scope of This Summary
 
 เอกสารนี้สรุปสถานะล่าสุดของ branch `staging-b` จากโค้ดที่มีอยู่จริงใน repository ณ วันที่ 2026-03-10 โดยแยกเป็น:

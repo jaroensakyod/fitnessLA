@@ -27,7 +27,7 @@ export function AuthGuard({ children }: { children: ReactNode }) {
           <p className="mt-3 text-sm leading-7 text-muted">
             {mode === "mock"
               ? "ตอนนี้ระบบใช้ mock session เพื่อให้พัฒนา flow ต่อได้ก่อน auth จริงพร้อม"
-              : "ตอนนี้ระบบต้องมี session bridge จาก backend ก่อนจึงจะเข้าใช้งานหน้าที่ต้องยืนยันตัวตนได้"}
+              : "ตอนนี้ระบบต้องเข้าสู่ระบบจริงก่อน จึงจะเข้าใช้งานหน้าที่ต้องยืนยันตัวตนได้"}
           </p>
           <Link
             href="/login"

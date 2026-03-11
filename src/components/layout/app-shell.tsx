@@ -61,7 +61,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <p className="mt-2 text-sm leading-6 text-white/72">
               {mode === "mock"
                 ? "โหมดทดลองใช้งานทันทีสำหรับคุมกะ, POS และเงินสดย่อย"
-                : "โหมดเชื่อม session bridge สำหรับทดสอบ API ที่พร้อมแล้ว"}
+                : "โหมดใช้งานจริงด้วย Better-Auth และ Cookie Session"}
             </p>
           </div>
 
@@ -144,7 +144,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               onClick={logout}
               className="mt-3 w-full rounded-2xl border border-line px-4 py-3 text-sm font-semibold text-foreground transition hover:border-warning hover:bg-warning-soft"
             >
-              {mode === "mock" ? "ออกจากระบบ mock" : "ล้าง session bridge"}
+              {mode === "mock" ? "ออกจากระบบ mock" : "ออกจากระบบ"}
             </button>
           </div>
         </aside>
