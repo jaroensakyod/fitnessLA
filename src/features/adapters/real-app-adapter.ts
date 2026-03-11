@@ -6,7 +6,6 @@ import type {
   MockShiftRecord,
   OrderResult,
   Product,
-  ShiftInventorySummaryRow,
   ShiftCloseResult,
   ShiftOpenResult,
   UserSession,

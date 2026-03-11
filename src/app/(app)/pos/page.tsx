@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { ShiftGuard } from "@/components/guards/shift-guard";
 import { useAppAdapter } from "@/features/adapters/adapter-provider";
@@ -110,7 +110,7 @@ export default function PosPage() {
     }
   }
 
-  async function refreshShiftInventory() {
+  const refreshShiftInventory = useCallback(async () => {
     if (!session?.active_shift_id) {
       setInventorySummary([]);
       setInventoryLoading(false);
@@ -129,7 +129,7 @@ export default function PosPage() {
     } finally {
       setInventoryLoading(false);
     }
-  }
+  }, [adapter, session?.active_shift_id]);
 
   useEffect(() => {
     let isActive = true;
@@ -156,7 +156,7 @@ export default function PosPage() {
 
   useEffect(() => {
     void refreshShiftInventory();
-  }, [adapter, session?.active_shift_id]);
+  }, [refreshShiftInventory]);
 
   useEffect(() => {
     if (!selectedProductId && products.length > 0) {

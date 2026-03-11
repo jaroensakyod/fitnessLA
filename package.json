@@ -10,7 +10,8 @@
     "test": "vitest run",
     "db:migrate": "prisma migrate dev --name init_accounting_auth",
     "db:seed": "prisma db seed",
-    "db:seed:users": "node prisma/seed-users.mjs"
+    "db:seed:users": "node prisma/seed-users.mjs",
+    "db:seed:real-mode": "node --env-file=.env scripts/seed-real-mode.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
