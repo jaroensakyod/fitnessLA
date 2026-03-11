@@ -47,9 +47,10 @@
 - **Strict Blind Drop:** การคุมพนักงานตอนปิดกะ (`shifts.expected_cash` vs `shifts.actual_cash`) เพื่อตรวจจับส่วนต่าง (`difference`)
 
 ## 🚩 Status & Signals
-- **Current Phase:** Phase 1 (Integration readiness A-4 -> Agent B)
-- **Latest Update:** 2026-03-09 (Agent A completed Phase A-4 Shift Close + Daily Summary with backend tests)
-- **Shared Agreement:** ยึด `API_Contract.md` เป็นหัวใจหลักในการคุยกัน. ปัจจุบัน Backend เตรียม API จริงรองรับ POS/Expense/Shift Close/Daily Summary แล้ว.
+- **Current Phase:** Phase 1.5 (Real Auth Activated, Agent B Integration Polish)
+- **Latest Update:** 2026-03-11 (Better-Auth cookie session migration complete, middleware guard active, hard gate passed)
+- **Shared Agreement:** ยึด `API_Contract.md` เป็นหัวใจหลักในการคุยกัน และให้ Agent B เดินงานต่อผ่าน `real-app-adapter.ts` เป็นจุดเชื่อมเดียว
+- **Handoff Doc (Agent B):** [docs/Handoff_2026-03-11_Agent-B_Real-Mode.md](docs/Handoff_2026-03-11_Agent-B_Real-Mode.md)
 
 ## 🤝 Implementation Integration Matrix (Agent A ⬌ Agent B)
 *(Use this matrix to track feature handoffs from Mock to Real)*
@@ -63,3 +64,28 @@
 | **Petty Cash** | ✅ DONE (`POST /api/v1/expenses`) | 🏗️ Mocked | Agent B ผูก `real-app-adapter.ts` |
 | **Close Shift** | ✅ DONE (`POST /api/v1/shifts/close`) | 🏗️ Mocked | Agent B switch close flow to real adapter endpoint |
 | **Daily Summary** | ✅ DONE (`GET /api/v1/reports/daily-summary`) | 🏗️ Mocked | Agent B switch report page to real adapter endpoint |
+
+## 🔄 2026-03-11 Grounding Delta (For Agent B)
+
+### ✅ Done ล่าสุด (ล็อกแล้ว)
+- Better-Auth แบบ cookie session เปิดใช้งานจริงแล้วใน `src/lib/auth.ts`
+- Session resolution ฝั่ง server ย้ายไปใช้ `auth.api.getSession()` ใน `src/lib/session.ts`
+- Route protection ด้วย `middleware.ts` ใช้งานแล้วสำหรับเส้นทางหลักของแอป
+- `real-app-adapter.ts` ต่อ endpoint จริงสำหรับ login/session, products, shifts, orders, expenses, daily summary, admin users
+- Hard Gate ผ่าน: build + lint + test (74/74)
+
+### 🟡 Remaining สำหรับ Agent B
+- Manual smoke test ฝั่ง browser ในโหมด `NEXT_PUBLIC_APP_ADAPTER=real`
+- ตรวจสอบ flow ปิดกะ, POS checkout, และ expenses จาก UI จริงพร้อม cookie persistence
+- เก็บ UX state บางจุดให้ครบ (loading/error/empty) ในหน้าที่เพิ่งต่อ endpoint จริง
+
+### 🔴 ยังไม่เปิดใช้งานจริง (ต้องรอ backend contract/implementation)
+- COA CRUD จริง
+- Product create/update/stock update จริง
+- Shift inventory summary จริง
+- Advanced reports (shift summary, P&L, GL) และ export APIs
+
+### 🚀 แผนต่อไป
+1. ปิดงาน smoke test + regression ย่อยในโหมด real
+2. Freeze รายการ mismatch ระหว่าง UI กับ API contract ที่ยังขาด
+3. เปิดแผน Phase 2 สำหรับ COA/Product management/report APIs ตามลำดับความสำคัญของ owner
