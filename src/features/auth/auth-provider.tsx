@@ -104,6 +104,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string) => {
     const nextSession = await adapter.authenticateUser(username, password);
+
+    // Persist session first so subsequent API calls can attach identity headers in real mode.
+    writeAuthState({
+      session: { ...nextSession, active_shift_id: nextSession.active_shift_id ?? null },
+      activeShift,
+      lastClosedShift,
+    });
+
     const resolvedActiveShift = adapter.mode === "real" ? await adapter.getActiveShift() : activeShift;
     const preservedShiftId = resolvedActiveShift?.shift_id ?? nextSession.active_shift_id ?? null;
 
