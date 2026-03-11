@@ -3,6 +3,18 @@ import { clearAuthState } from "@/features/auth/auth-storage";
 import type { CreateOrderRequest } from "@/lib/contracts";
 import type { CreateAdminUserInput } from "@/features/adapters/types";
 
+const { signInUsernameMock } = vi.hoisted(() => ({
+  signInUsernameMock: vi.fn(),
+}));
+
+vi.mock("@/lib/auth-client", () => ({
+  authClient: {
+    signIn: {
+      username: signInUsernameMock,
+    },
+  },
+}));
+
 /** Minimal 200 JSON response for fetchJson to parse */
 function mockJsonResponse(body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -17,6 +29,8 @@ describe("real-app-adapter — request payload shapes", () => {
   beforeEach(() => {
     localStorage.clear();
     clearAuthState();
+    signInUsernameMock.mockReset();
+    signInUsernameMock.mockResolvedValue({ error: null });
   });
 
   afterEach(() => {
@@ -33,7 +47,7 @@ describe("real-app-adapter — request payload shapes", () => {
 
   // ── 2A: Authentication ─────────────────────────────────────────────────
 
-  it("2A-1: authenticateUser GETs /api/auth/session with x-username header", async () => {
+  it("2A-1: authenticateUser signs in with username/password then GETs /api/auth/session", async () => {
     spyFetch({
       user_id: "1",
       username: "admin",
@@ -44,12 +58,17 @@ describe("real-app-adapter — request payload shapes", () => {
 
     await realAppAdapter.authenticateUser("admin", "any-password");
 
+    expect(signInUsernameMock).toHaveBeenCalledWith({
+      username: "admin",
+      password: "any-password",
+    });
+
     const [url, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
     expect(url).toBe("/api/auth/session");
-    expect((init.headers as Headers).get("x-username")).toBe("admin");
+    expect(init.credentials).toBe("include");
   });
 
-  it("2A-2: authenticateUser does NOT send password in request body", async () => {
+  it("2A-2: authenticateUser does NOT send password via fetch body", async () => {
     spyFetch({
       user_id: "1",
       username: "admin",

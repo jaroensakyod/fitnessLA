@@ -2,6 +2,18 @@ import { realAppAdapter } from "@/features/adapters/real-app-adapter";
 import { clearAuthState } from "@/features/auth/auth-storage";
 import type { CreateOrderRequest } from "@/lib/contracts";
 
+const { signInUsernameMock } = vi.hoisted(() => ({
+  signInUsernameMock: vi.fn(),
+}));
+
+vi.mock("@/lib/auth-client", () => ({
+  authClient: {
+    signIn: {
+      username: signInUsernameMock,
+    },
+  },
+}));
+
 /**
  * Phase 4: Response Shape Alignment Tests
  *
@@ -39,6 +51,8 @@ describe("real-app-adapter — response shape alignment", () => {
 
   beforeEach(() => {
     clearAuthState();
+    signInUsernameMock.mockReset();
+    signInUsernameMock.mockResolvedValue({ error: null });
   });
 
   afterEach(() => {

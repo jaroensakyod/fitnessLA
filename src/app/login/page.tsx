@@ -55,7 +55,7 @@ export default function LoginPage() {
             ระบบหน้าร้านโทนดำเหลือง ที่มองง่าย ใช้งานง่าย และเห็นสถานะงานชัด
           </h1>
           <p className="mt-5 max-w-xl text-base leading-8 text-white/75">
-            ใช้โหมด mock เพื่อทดลอง flow หลักได้ทันที และสลับไป session bridge เมื่อ backend พร้อมจริง
+            ใช้โหมด mock เพื่อทดลอง flow หลักได้ทันที และสลับไปล็อกอินจริงด้วย username/password เมื่อ backend พร้อม
           </p>
 
           <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -74,7 +74,7 @@ export default function LoginPage() {
 
         <section className="rounded-[36px] border border-line bg-surface p-8 shadow-[var(--shadow)] backdrop-blur md:p-10">
           <p className="text-xs uppercase tracking-[0.32em] text-muted">
-            {mode === "mock" ? "เข้าสู่ระบบแบบ mock" : "เข้าสู่ระบบแบบ session bridge"}
+            {mode === "mock" ? "เข้าสู่ระบบแบบ mock" : "เข้าสู่ระบบแบบ real auth"}
           </p>
           <h2 className="mt-4 text-3xl font-semibold text-foreground">เข้าสู่หน้าควบคุมงาน</h2>
           <p className="mt-3 text-sm leading-7 text-muted">
@@ -82,7 +82,7 @@ export default function LoginPage() {
               ? <>
                   มีผู้ใช้ตัวอย่างให้แล้ว รหัสผ่านของทุกบทบาทคือ <span className="font-semibold text-foreground">{demoPassword}</span>
                 </>
-              : "โหมดนี้ใช้ username เพื่อเชื่อม session bridge ชั่วคราวกับ backend"}
+              : "โหมดนี้ยืนยันตัวตนด้วย username และรหัสผ่านจากฐานข้อมูลจริง"}
           </p>
 
           {adapter.mode === "mock" ? (
@@ -106,7 +106,7 @@ export default function LoginPage() {
           <div className="mt-5 rounded-[24px] border border-line bg-surface-strong p-4 text-sm leading-7 text-muted">
             {mode === "mock"
               ? "ลองใช้งานได้ทันทีด้วย owner, admin, cashier และรหัสผ่าน demo1234"
-              : "โหมดนี้ต้องมีข้อมูลผู้ใช้ในฐานข้อมูล จึงจะล็อกอินสำเร็จ"}
+              : "โหมดนี้ต้องมีผู้ใช้ที่ seed ไว้และใช้รหัสผ่านจริงเพื่อเข้าสู่ระบบ"}
           </div>
 
           <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
@@ -142,7 +142,7 @@ export default function LoginPage() {
               disabled={isSubmitting}
               className="w-full rounded-full bg-accent px-5 py-3 text-sm font-semibold text-black transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isSubmitting ? "กำลังเข้าสู่ระบบ..." : mode === "mock" ? "เริ่มใช้งาน mock" : "เชื่อม session bridge"}
+              {isSubmitting ? "กำลังเข้าสู่ระบบ..." : mode === "mock" ? "เริ่มใช้งาน mock" : "เข้าสู่ระบบจริง"}
             </button>
           </form>
         </section>

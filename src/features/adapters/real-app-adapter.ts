@@ -17,26 +17,16 @@ import type {
   CreateProductInput,
   UpdateProductInput,
 } from "@/features/adapters/types";
-import { readAuthState } from "@/features/auth/auth-storage";
+import { authClient } from "@/lib/auth-client";
 
 function createHeaders(headers?: HeadersInit): Headers {
-  const nextHeaders = new Headers(headers);
-  const session = readAuthState().session;
-
-  if (session?.user_id !== null && session?.user_id !== undefined && !nextHeaders.has("x-user-id")) {
-    nextHeaders.set("x-user-id", String(session.user_id));
-  }
-
-  if (session?.username && !nextHeaders.has("x-username")) {
-    nextHeaders.set("x-username", session.username);
-  }
-
-  return nextHeaders;
+  return new Headers(headers);
 }
 
 async function fetchJson<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
   const response = await fetch(input, {
     ...init,
+    credentials: "include",
     headers: createHeaders(init?.headers),
   });
   if (!response.ok) {
@@ -50,6 +40,7 @@ async function fetchJson<T>(input: RequestInfo, init?: RequestInit): Promise<T> 
 async function fetchOptionalJson<T>(input: RequestInfo, init?: RequestInit): Promise<T | null> {
   const response = await fetch(input, {
     ...init,
+    credentials: "include",
     headers: createHeaders(init?.headers),
   });
 
@@ -76,21 +67,32 @@ export const realAppAdapter: AppAdapter = {
   mode: "real",
 
   async authenticateUser(username: string, password: string) {
-    void password;
     const normalizedUsername = username.trim();
 
     if (!normalizedUsername) {
       throw {
         code: "INVALID_CREDENTIALS",
-        message: "กรุณาระบุชื่อผู้ใช้สำหรับเชื่อม session bridge",
+        message: "กรุณาระบุชื่อผู้ใช้",
       };
     }
 
-    return fetchJson<UserSession>("/api/auth/session", {
-      headers: {
-        "x-username": normalizedUsername,
-      },
+    if (!password) {
+      return fetchJson<UserSession>("/api/auth/session");
+    }
+
+    const signInResult = await authClient.signIn.username({
+      username: normalizedUsername,
+      password,
     });
+
+    if (signInResult.error) {
+      throw {
+        code: "INVALID_CREDENTIALS",
+        message: signInResult.error.message ?? "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+      };
+    }
+
+    return fetchJson<UserSession>("/api/auth/session");
   },
 
   async getActiveShift() {

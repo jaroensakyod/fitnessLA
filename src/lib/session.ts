@@ -1,5 +1,6 @@
 import type { User } from "@prisma/client";
 
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { toAppRole, type AppRole } from "@/lib/roles";
 
@@ -37,14 +38,16 @@ async function toUserSession(user: User): Promise<UserSession | null> {
 }
 
 export async function resolveSessionFromRequest(request: Request): Promise<UserSession | null> {
-  const userId = request.headers.get("x-user-id");
-  const username = request.headers.get("x-username");
+  const authSession = await auth.api.getSession({
+    headers: new Headers(request.headers),
+  });
 
-  const user = userId
-    ? await prisma.user.findUnique({ where: { id: userId } })
-    : username
-      ? await prisma.user.findUnique({ where: { username } })
-      : null;
+  const authenticatedUserId = authSession?.user?.id;
+  if (!authenticatedUserId) {
+    return null;
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: authenticatedUserId } });
 
   return user ? toUserSession(user) : null;
 }
